@@ -1,6 +1,8 @@
 import { describe, it, beforeEach } from "node:test";
 import assert from "node:assert/strict";
 import { store } from "../src/store.js";
+import request from "supertest";
+import { app } from "../src/server.js";
 
 describe("store", () => {
   beforeEach(() => store.reset());
@@ -48,5 +50,79 @@ describe("store", () => {
   it("returns null when updating unknown id", () => {
     const result = store.update("nonexistent", { status: "resolved" });
     assert.equal(result, null);
+  });
+});
+
+describe("API", () => {
+  beforeEach(() => store.reset());
+
+  it("GET /api/incidents returns list", async () => {
+    const res = await request(app).get("/api/incidents");
+    assert.equal(res.status, 200);
+    assert.ok(Array.isArray(res.body));
+    assert.ok(res.body.length >= 3);
+  });
+
+  it("POST /api/incidents creates incident", async () => {
+    const res = await request(app)
+      .post("/api/incidents")
+      .send({ title: "New incident", severity: "high" });
+    assert.equal(res.status, 201);
+    assert.equal(res.body.title, "New incident");
+    assert.equal(res.body.severity, "high");
+    assert.equal(res.body.status, "open");
+  });
+
+  it("POST /api/incidents validates required fields", async () => {
+    const res = await request(app).post("/api/incidents").send({});
+    assert.equal(res.status, 400);
+  });
+
+  it("POST /api/incidents rejects invalid severity", async () => {
+    const res = await request(app)
+      .post("/api/incidents")
+      .send({ title: "Test", severity: "bananas" });
+    assert.equal(res.status, 400);
+  });
+
+  it("GET /api/incidents/:id returns single incident", async () => {
+    const list = await request(app).get("/api/incidents");
+    const id = list.body[0].id;
+    const res = await request(app).get(`/api/incidents/${id}`);
+    assert.equal(res.status, 200);
+    assert.equal(res.body.id, id);
+  });
+
+  it("GET /api/incidents/:id returns 404 for unknown", async () => {
+    const res = await request(app).get("/api/incidents/nonexistent");
+    assert.equal(res.status, 404);
+  });
+
+  it("PATCH /api/incidents/:id updates incident", async () => {
+    const list = await request(app).get("/api/incidents");
+    const id = list.body[0].id;
+    const res = await request(app)
+      .patch(`/api/incidents/${id}`)
+      .send({ status: "resolved" });
+    assert.equal(res.status, 200);
+    assert.equal(res.body.status, "resolved");
+    assert.ok(res.body.resolvedAt);
+  });
+
+  it("PATCH /api/incidents/:id changes severity", async () => {
+    const list = await request(app).get("/api/incidents");
+    const id = list.body[0].id;
+    const res = await request(app)
+      .patch(`/api/incidents/${id}`)
+      .send({ severity: "low" });
+    assert.equal(res.status, 200);
+    assert.equal(res.body.severity, "low");
+  });
+
+  it("PATCH /api/incidents/:id returns 404 for unknown", async () => {
+    const res = await request(app)
+      .patch("/api/incidents/nonexistent")
+      .send({ status: "resolved" });
+    assert.equal(res.status, 404);
   });
 });
