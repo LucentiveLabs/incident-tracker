@@ -4,16 +4,16 @@ Update this file at the start of any substantial run. It is the shared “world 
 
 ## Status
 
-- production: TODO
+- production: false
 - deployed_version_ref: n/a
-- engagement_type: greenfield
+- engagement_type: brownfield
 - execution_mode: local-runtime-first (record any temporary framework-specific command path in notes)
 
 ## Research tools (optional)
 
 - web_search: true
 - mcp_pack: none
-- mcp_budget_calls_per_task: 3
+- mcp_budget_calls_per_task: 0
 - preferred_mcp_servers:
   - (optional) perplexity
   - (optional) context7

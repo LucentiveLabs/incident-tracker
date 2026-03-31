@@ -10,5 +10,5 @@ Examples:
 
 ## Goal
 
-TODO
+Index repository for context
 
