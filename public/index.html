@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Incident Tracker</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Incident Tracker</h1>
+      <p class="subtitle">Log and manage operational incidents</p>
+    </header>
+
+    <section class="create-form">
+      <h2>Report Incident</h2>
+      <form id="create-form">
+        <div class="form-row">
+          <input type="text" id="title" placeholder="What happened?" required>
+          <select id="severity" required>
+            <option value="">Severity</option>
+            <option value="critical">Critical</option>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select>
+          <button type="submit">Report</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="incidents">
+      <h2>Incidents</h2>
+      <div id="incident-list"></div>
+    </section>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
