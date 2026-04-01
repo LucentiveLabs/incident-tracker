@@ -6,7 +6,7 @@ Use this when the work is user-facing and screenshots are required.
 
 - type: web | ios | android | other
 - entrypoint:
-  - TODO (URL, route, screen, or app state)
+  - `http://localhost:3000/status` (internal status dashboard, Basic Auth)
 
 ## Viewports / devices
 
@@ -17,13 +17,21 @@ Use this when the work is user-facing and screenshots are required.
 
 ## Screens to capture (ordered)
 
-1) TODO
+1) `/status` (healthy) — desktop + mobile
 
 For each screen define:
 
 - state (logged out / logged in / seeded user)
 - required data setup
 - success + error/empty variant (if relevant)
+
+For this run:
+
+- state: Basic Auth credentials set via env vars (`STATUS_USER`, `STATUS_PASS`)
+- required data setup: none (metrics are in-memory; generate a few requests to populate)
+- variants:
+  - success: shows uptime + latency metrics
+  - error: (optional) show “monitoring disabled” state when `DISABLE_MONITORING=true`
 
 ## How to capture (commands)
 
@@ -38,9 +46,20 @@ Examples (repo-agnostic, no Playwright dependency required):
 
 If the flow requires auth, prefer making auth reproducible (seeded user + scripted login) rather than relying on a manual browser session.
 
+Repo-specific (non-secret placeholders):
+
+1) Start the server:
+   - `STATUS_USER=snapshot STATUS_PASS=snapshot npm run dev`
+2) Generate a bit of traffic (optional, for metrics):
+   - `curl -s http://localhost:3000/api/incidents >/dev/null`
+3) Capture screenshots (Playwright via `npx`):
+   - `npx -y playwright@latest install chromium`
+   - `npx -y playwright@latest screenshot http://snapshot:snapshot@localhost:3000/status docs/ias/runs/20260401-api-observability-monitoring-implementation/screenshots/status-desktop.png --viewport-size=1440,900 --full-page`
+   - `npx -y playwright@latest screenshot http://snapshot:snapshot@localhost:3000/status docs/ias/runs/20260401-api-observability-monitoring-implementation/screenshots/status-mobile.png --viewport-size=390,844 --full-page`
+
 ## Notes
 
-- TODO
+- Do not use real credentials in screenshot commands; use local placeholders.
 
 ## Commit policy (optional)
 

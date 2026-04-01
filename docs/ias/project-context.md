@@ -4,9 +4,9 @@ Update this file at the start of any substantial run. It is the shared “world 
 
 ## Status
 
-- production: TODO
+- production: false (assumed; see decision `docs/ias/decisions/20260401-0001-confirm-goal-stakeholders-production.md`)
 - deployed_version_ref: n/a
-- engagement_type: greenfield
+- engagement_type: brownfield
 - execution_mode: local-runtime-first (record any temporary framework-specific command path in notes)
 
 ## Research tools (optional)
@@ -24,28 +24,30 @@ Update this file at the start of any substantial run. It is the shared “world 
 
 - base_goal_ref: `docs/ias/context/base-goal.md`
 - success_criteria:
-  - TODO
+  - Meet `docs/ias/runs/20260401-api-observability-monitoring-implementation/acceptance-criteria.md`.
 
 ## Stakeholders
 
-- primary_stakeholder: TODO
-- users: TODO
+- primary_stakeholder: Engineering (TBD; see decision `docs/ias/decisions/20260401-0001-confirm-goal-stakeholders-production.md`)
+- users: Backend developers and operators (DevOps/SRE)
 - other_stakeholders:
-  - TODO
+  - Security/compliance (PII/secret handling in logs)
 
 ## Non-negotiable constraints (hard constraints)
 
 - Markdown-only documentation under `docs/` (keep docs current with behavior changes).
 - No real secrets in git (use placeholders/mocks and document required env vars).
+- Must use Pino for logging (structured JSON + redaction).
+- Must use LogRocket for error tracking.
+- `/status` dashboard must be internal and secured.
 
 ## Constraints (soft / preferences)
 
 - tech_preferences:
-  - TypeScript
-  - Next.js (common default)
-  - Tailwind + shadcn/ui + Convex (greenfield default)
+  - Node.js (>=20) + Express (v5) + ESM
+  - Minimal dependencies; prefer small middleware and simple primitives
 - testing_preferences:
-  - unit_tests_for_core_logic: true
+  - unit_tests_for_core_logic: true (Node `node:test` + `supertest`)
   - frontend_e2e: false
 - docs_conventions:
   - markdown_only: true

@@ -10,5 +10,4 @@ Examples:
 
 ## Goal
 
-TODO
-
+Add an API observability and monitoring suite to `incident-tracker` (health checks, JSON logging with PII redaction, LogRocket error tracking, and a secured internal status dashboard) without requiring an external metrics database.
