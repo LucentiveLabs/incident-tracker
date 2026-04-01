@@ -1,1 +1,8 @@
 node_modules/
+
+# macOS Finder metadata
+.DS_Store
+
+# IAS runtime state (local-only)
+/.ias/
+/.ias/**
